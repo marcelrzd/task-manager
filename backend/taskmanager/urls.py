@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from api import views  # Importing the view from the api app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('task-list/', views.task_list, name='task-list'),  # This will expose the endpoint at /tasks/
 ]
+
+

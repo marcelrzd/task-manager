@@ -20,7 +20,8 @@ from api import views  # Importing the view from the api app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('task-list/', views.task_list, name='task-list'),  # This will expose the endpoint at /tasks/
+    path('task-list/', views.ManageTasks.as_view(), name='task-list'),
+    path('delete-task/<int:task_id>/', views.ManageTasks.as_view(), name='task-delete'),
 ]
 
 

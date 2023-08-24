@@ -14,22 +14,36 @@ React for the frontend.
 
 ## Getting Started:
 
-1. To get started with this project, first clone the repository:
+1. To get started with this project, first navigate to a folder in your computer
+
+2. Open a terminal
+
+3. Clone the repository:
 
 - git clone https://github.com/marcelrzd/task-manager.git
 - cd task-manager
 
 ## Backend Setup:
 
-1. Create a virtual environment:
-   - python3 -m venv venv
-   - source venv/bin/activate
-2. Install the required packages:
+1. Navigate to backend folder:
+
+   - cd backend
+
+2. Create a virtual environment:
+
+   - python -m venv venv (or python3 -m venv venv)
+
+3. Activate the virtual environment:
+
+   - source venv/bin/activate (On macOS and Linux)
+   - venv\Scripts\activate (On Windows)
+
+4. Install the required packages:
    - pip install -r requirements.txt
-3. Make migrations and migrate:
+5. Make migrations and migrate to create a database:
    - python manage.py makemigrations api
    - python manage.py migrate
-4. Run the server:
+6. Run the server:
    - python manage.py runserver
 
 ## Frontend Setup:

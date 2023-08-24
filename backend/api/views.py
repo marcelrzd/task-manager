@@ -40,14 +40,14 @@ class ManageTasks(APIView):
         elif obj.task_type == 'Health' and obj.due_date <= date.today() + timedelta(days=3) and "Treatment" not in obj.name:
             return obj.URGENT
         # Logic for Can be postponed label
-        elif obj.task_type == 'Personal' and obj.due_date <= date.today() + timedelta(weeks=1):
+        elif obj.task_type == 'Personal' and obj.due_date <= date.today() + timedelta(days=7):
             return obj.POSTPONED
         elif obj.task_type == 'Other' and obj.due_date <= date.today() + timedelta(days=5):
             return obj.POSTPONED
-        elif obj.task_type == 'Work' and ( "PLO" in obj.name or "GJL" in obj.name) and obj.due_date <= date.today() + timedelta(weeks=4):
+        elif obj.task_type == 'Work' and ( "PLO" in obj.name or "GJL" in obj.name) and obj.due_date <= date.today() + timedelta(days=30):
             return obj.POSTPONED
         # Logic for Not important label
-        elif obj.due_date and obj.due_date > date.today() + timedelta(weeks=1):
+        elif obj.due_date and obj.due_date > date.today() + timedelta(days=7):
             return obj.NOT_IMPORTANT
         elif obj.task_type == 'Other' and not obj.due_date:
             return obj.NOT_IMPORTANT

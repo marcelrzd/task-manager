@@ -53,12 +53,24 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
+
 ROOT_URLCONF = 'taskmanager.urls'
 
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # local
+    "http://localhost:3000",  # local url
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",  # local url
 ]
 
 TEMPLATES = [

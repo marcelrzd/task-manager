@@ -33,20 +33,18 @@ function ListTasks() {
 
   return (
     <div className="p-4">
-      <div className="p-4">
-        {/* ... (rest of your existing code) */}
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <h1 className="text-2xl mb-4">Tasks</h1>
       <table className="min-w-full bg-white shadow-md rounded mb-4">
         <thead>

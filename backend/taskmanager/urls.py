@@ -20,8 +20,12 @@ from api import views  # Importing the view from the api app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # fetch csrf token
+    path('csrf/', views.csrf, name='csrf'),
+    # tasks urls
     path('task-list/', views.ManageTasks.as_view(), name='task-list'),
     path('delete-task/<int:task_id>/', views.ManageTasks.as_view(), name='task-delete'),
+    path('create-task/', views.ManageTasks.as_view(), name='task-create'),
 ]
 
 

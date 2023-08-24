@@ -2,12 +2,52 @@ import { ToastContainer, toast } from "react-toastify";
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import LabelModal from "../../components/LabelModal";
 
 function ListTasks() {
   const [tasks, setTasks] = useState([]);
   const [labelFilter, setLabelFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [sortDirection, setSortDirection] = useState("ascending");
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  // update label
+  const handleOpenModal = (task) => {
+    setSelectedTask(task);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTask(null);
+    setShowModal(false);
+  };
+
+  const handleLabelChange = async (newLabel) => {
+    if (selectedTask) {
+      try {
+        const response = await axios.patch(
+          `http://localhost:8000/update-task/${selectedTask.id}/`,
+          {
+            label: newLabel,
+          }
+        );
+
+        if (response.status === 200) {
+          // Update local state or refetch the list of tasks if you're keeping them in a state
+          setSelectedTask((prevTask) => ({ ...prevTask, label: newLabel }));
+          toast.success(
+            "'" + selectedTask.name + "' label updated successfully!"
+          );
+        }
+      } catch (error) {
+        console.error("Error updating label:", error);
+        toast.error("Error updating label");
+      }
+    }
+    fetchTasks();
+  };
 
   // Listing tasks
   const fetchTasks = async (label = labelFilter) => {
@@ -109,7 +149,7 @@ function ListTasks() {
             <th className="w-1/1 text-left py-3 px-4 uppercase font-semibold text-sm">
               ID
             </th>
-            <th className="w-1/4 text-left py-3 px-4 uppercase font-semibold text-sm">
+            <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm">
               Name
             </th>
             <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
@@ -164,11 +204,11 @@ function ListTasks() {
             tasks.map((task) => (
               <tr key={task.id}>
                 <td className="w-1/1 text-left py-3 px-4">{task.id}</td>
-                <td className="w-1/4 text-left py-3 px-4">{task.name}</td>
+                <td className="w-1/6 text-left py-3 px-4">{task.name}</td>
                 <td className="w-1/3 text-left py-3 px-4">
                   {task.description}
                 </td>
-                <td className="text-left py-3 px-4">{task.task_type}</td>
+                <td className="text-left w-1/12 py-3 px-4">{task.task_type}</td>
                 <td className="text-left py-3 px-4">
                   {task.formatted_due_date}
                 </td>
@@ -184,9 +224,15 @@ function ListTasks() {
                 <td className="text-left py-3 px-4">
                   <button
                     onClick={() => handleDelete(task.id)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 hover:text-red-700 px-4  border-red-500"
                   >
                     Delete
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleOpenModal(task)}
+                  >
+                    Change Label
                   </button>
                 </td>
               </tr>
@@ -200,7 +246,17 @@ function ListTasks() {
           )}
         </tbody>
       </table>
+      {selectedTask && (
+        <LabelModal
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          onSubmit={handleLabelChange}
+          currentLabel={selectedTask.label}
+        />
+      )}
     </div>
+
+    // Modal code
   );
 }
 

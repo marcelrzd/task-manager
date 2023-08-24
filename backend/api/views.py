@@ -16,6 +16,7 @@ class ManageTasks(APIView):
 
     # Handle the GET request to list tasks
     def get(self, request):
+        """List tasks."""
         tasks = Task.objects.all()
 
         # filter logic
@@ -57,6 +58,7 @@ class ManageTasks(APIView):
 
     # Handle the DELETE request to delete a task
     def delete(self, request, task_id=None):
+        """Delete task."""
         if not task_id:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
@@ -66,6 +68,7 @@ class ManageTasks(APIView):
 
     # Handle the POST request for creating a task
     def post(self, request):
+        """create task."""
         serializer = TaskSerializer(data=request.data)
         if serializer.is_valid():
             task = serializer.save()
@@ -74,3 +77,19 @@ class ManageTasks(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, task_id=None):
+        """Update task label."""
+        try:
+            task = get_object_or_404(Task, id=task_id)
+
+            serializer = TaskSerializer(task, data=request.data, partial=True)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

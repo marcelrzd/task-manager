@@ -15,9 +15,9 @@ A simple, yet powerful, task manager web app built using Django for the backend 
 
 1. Create a virtual environment:
    \```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   \```
+   - python3 -m venv venv
+   - source venv/bin/activate
+     \```
 2. Install the required packages:
    \```bash
    pip install -r requirements.txt

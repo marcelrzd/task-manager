@@ -143,7 +143,6 @@ function CreateTask() {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="dueDate"
             type="date"
-            required
           />
         </div>
         <div className="flex items-center justify-between">

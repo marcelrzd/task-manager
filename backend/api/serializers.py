@@ -9,7 +9,8 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = [f.name for f in Task._meta.fields] + ['label']
 
-    def get_label(self, obj):
+    @staticmethod
+    def get_label(obj):
         # Logic for Urgent label
         if obj.task_type == 'Work' and obj.due_date == date.today() + timedelta(days=1):
             return 'Urgent'

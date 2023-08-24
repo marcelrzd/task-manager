@@ -16,6 +16,12 @@ class ManageTasks(APIView):
     # Handle the GET request to list tasks
     def get(self, request):
         tasks = Task.objects.all()
+
+        label_filter = request.GET.get('label', None)
+        
+        if label_filter:
+            tasks = [task for task in tasks if TaskSerializer.get_label(task) == label_filter]
+
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
 

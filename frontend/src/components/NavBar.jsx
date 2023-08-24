@@ -6,7 +6,11 @@ const Navbar = () => {
     <nav className="bg-blue-600 p-6">
       <div className="container mx-auto">
         <div className="flex justify-between">
-          <div className="text-white font-bold text-xl">TaskManager</div>
+          <div className="text-white font-bold text-xl">
+            <Link to="/" className="text-white hover:text-gray-300">
+              TaskManager
+            </Link>
+          </div>
           <ul className="flex space-x-4">
             <li>
               <Link to="/" className="text-white hover:text-gray-300">

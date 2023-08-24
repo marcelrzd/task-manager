@@ -6,6 +6,8 @@ import axios from "axios";
 function ListTasks() {
   const [tasks, setTasks] = useState([]);
   const [labelFilter, setLabelFilter] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [sortDirection, setSortDirection] = useState("ascending");
 
   // Listing tasks
   const fetchTasks = async (label = labelFilter) => {
@@ -16,6 +18,33 @@ function ListTasks() {
     const response = await axios.get(url);
     setTasks(response.data);
   };
+
+  useEffect(() => {
+    const direction = sortDirection === "ascending" ? "" : "-"; // Django ORM uses "-" prefix for descending
+    axios
+      .get(
+        `http://localhost:8000/task-list/${
+          sortBy ? `?sort=${direction}${sortBy}` : ""
+        }`
+      )
+      .then((response) => {
+        setTasks(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+      });
+  }, [sortBy, sortDirection]);
+
+  function handleSort(field) {
+    if (sortBy === field) {
+      setSortDirection((prev) =>
+        prev === "ascending" ? "descending" : "ascending"
+      );
+    } else {
+      setSortBy(field);
+      setSortDirection("ascending");
+    }
+  }
 
   const handleLabelFilterChange = (e) => {
     const newLabel = e.target.value;
@@ -87,11 +116,43 @@ function ListTasks() {
               Description
             </th>
             <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-              Type
+              Type{" "}
+              <span
+                className="cursor-pointer"
+                onClick={() => handleSort("task_type")}
+              >
+                {sortBy === "task_type"
+                  ? sortDirection === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : "↕"}
+              </span>
             </th>
-            <th>DUE DATE</th>
             <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-              Label
+              due date{" "}
+              <span
+                className="cursor-pointer"
+                onClick={() => handleSort("due_date")}
+              >
+                {sortBy === "due_date"
+                  ? sortDirection === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : "↕"}
+              </span>
+            </th>
+            <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
+              Label{" "}
+              <span
+                className="cursor-pointer"
+                onClick={() => handleSort("label")}
+              >
+                {sortBy === "label"
+                  ? sortDirection === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : "↕"}
+              </span>
             </th>
             <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
               Actions
@@ -108,7 +169,9 @@ function ListTasks() {
                   {task.description}
                 </td>
                 <td className="text-left py-3 px-4">{task.task_type}</td>
-                <td className="text-left py-3 px-4">{task.due_date}</td>
+                <td className="text-left py-3 px-4">
+                  {task.formatted_due_date}
+                </td>
                 <td className="text-left py-3 px-4">
                   <span
                     className={`inline-block text-xs py-1 px-2 rounded ${labelClasses(
